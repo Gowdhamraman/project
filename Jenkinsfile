@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_HUB_REPO_DEV = 'gowdhamr/dev'
         DOCKER_HUB_REPO_PROD = 'gowdhamr/prod'
-        DOCKER_HUB_CREDENTIALS = 'docker-hub' // ID of Docker Hub credentials
+        DOCKER_HUB_CREDENTIALS = 'docker-logins' // ID of Docker Hub credentials
     }
     stages {
         stage('Checkout') {
