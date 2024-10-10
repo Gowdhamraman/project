@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Push Docker Image to Prod') {
             when {
-                branch 'master'
+                branch 'main'
             }
             steps {
                 script {
