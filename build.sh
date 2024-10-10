@@ -1,2 +1,5 @@
 #!/bin/bash
-docker build -t gowdhamr/projectapp:latest .
+
+docker-compose build
+
+docker tag devops-build gowdhamr/dev:latest
