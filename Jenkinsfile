@@ -8,12 +8,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                // Checkout code from GitHub
                 git branch: 'dev', url: 'https://github.com/Gowdhamraman/project.git'
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Build the Docker image
                     dockerImage = docker.build("${DOCKER_HUB_REPO_DEV}:latest")
                 }
             }
@@ -33,9 +35,21 @@ pipeline {
             }
             steps {
                 script {
+                    // Push the image to the dev repository on Docker Hub
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_HUB_CREDENTIALS}") {
                         dockerImage.push('latest')
                     }
+                }
+            }
+        }
+        stage('Build Prod Image') {
+            when {
+                branch 'master'
+            }
+            steps {
+                script {
+                    // Tag the image for production
+                    dockerImage.tag("${DOCKER_HUB_REPO_PROD}:latest")
                 }
             }
         }
@@ -45,6 +59,7 @@ pipeline {
             }
             steps {
                 script {
+                    // Push the tagged image to the prod repository on Docker Hub
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_HUB_CREDENTIALS}") {
                         dockerImage.push('latest')
                     }
