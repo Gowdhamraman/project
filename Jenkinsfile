@@ -18,6 +18,15 @@ pipeline {
                 }
             }
         }
+        stage('Test') {
+            steps {
+                script {
+                    // Add commands to run tests here
+                    echo 'Running tests...'
+                    // Example: sh 'docker run --rm ${dockerImage.id} test-command'
+                }
+            }
+        }
         stage('Push Docker Image to Dev') {
             when {
                 branch 'dev'
@@ -32,7 +41,7 @@ pipeline {
         }
         stage('Push Docker Image to Prod') {
             when {
-                branch 'main'
+                branch 'master'
             }
             steps {
                 script {
