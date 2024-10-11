@@ -10,9 +10,9 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'dev') {
-                        sh 'docker push yourusername/dev:latest'
-                    } else if (env.BRANCH_NAME == 'master') {
-                        sh 'docker push yourusername/prod:latest'
+                        sh 'docker push gowdhamr/dev:latest'
+                    } else if (env.BRANCH_NAME == 'main') {
+                        sh 'docker push gowdhamr/prod:latest'
                     }
                 }
             }
