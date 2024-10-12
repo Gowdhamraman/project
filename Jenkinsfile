@@ -25,15 +25,6 @@ pipeline {
             }
         }
 
-        stage('Detect Branch') {  // Add this stage to debug branch detection
-            steps {
-                script {
-                    def branch = env.GIT_BRANCH ? env.GIT_BRANCH.split('/').last() : 'unknown'
-                    echo "Current branch is: ${branch}"  // Output the branch name
-                }
-            }
-        }
-
         stage('Push to Docker Hub') {
             steps {
                 script {
@@ -42,8 +33,7 @@ pipeline {
                         
                         def branch = env.GIT_BRANCH ? env.GIT_BRANCH.split('/').last() : 'unknown'
 
-                        // Ensure the correct branch name is detected
-                        echo "Pushing based on branch: ${branch}"
+                        echo "Detected branch: ${branch}"
 
                         if (branch == 'dev') {
                             echo "Pushing to development repository..."
