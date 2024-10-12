@@ -42,7 +42,7 @@ pipeline {
                             echo "Pushing to development repository..."
                             sh "docker tag project-app ${DEV_IMAGE_NAME}"
                             sh "docker push ${DEV_IMAGE_NAME}" // Push the image to Docker Hub
-                        } else if (branch == 'main' || branch == 'master') {
+                        } else if (branch == 'main') {
                             echo "Pushing to production repository..."
                             sh "docker tag project-app ${PROD_IMAGE_NAME}"
                             sh "docker push ${PROD_IMAGE_NAME}" // Push the image to Docker Hub
