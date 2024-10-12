@@ -35,11 +35,13 @@ pipeline {
 
                         // Determine which image to push based on the branch
                         if (env.BRANCH_NAME == 'dev') {
-                            sh "docker tag project.app ${DEV_IMAGE_NAME}"
+                            // Tag and push to dev repository
+                            sh "docker tag project-app ${DEV_IMAGE_NAME}"
                             sh "docker push ${DEV_IMAGE_NAME}"
                         } 
                         else if (env.BRANCH_NAME == 'main') {  // If your branch is 'main'
-                            sh "docker tag project.app ${PROD_IMAGE_NAME}"
+                            // Tag and push to prod repository
+                            sh "docker tag project-app ${PROD_IMAGE_NAME}"
                             sh "docker push ${PROD_IMAGE_NAME}"
                         }
                     }
