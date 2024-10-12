@@ -34,17 +34,20 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
                         
+                        // Detect the branch from the environment (replace with the correct branch variable)
+                        def branch = env.GIT_BRANCH ? env.GIT_BRANCH.split('/').last() : 'unknown'
+
                         // Check which branch we're working on and push accordingly
-                        if (env.BRANCH_NAME == 'dev') {
+                        if (branch == 'dev') {
                             echo "Pushing to development repository..."
                             sh "docker tag project-app ${DEV_IMAGE_NAME}"
                             sh "docker push ${DEV_IMAGE_NAME}" // Push the image to Docker Hub
-                        } else if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
+                        } else if (branch == 'main' || branch == 'master') {
                             echo "Pushing to production repository..."
                             sh "docker tag project-app ${PROD_IMAGE_NAME}"
                             sh "docker push ${PROD_IMAGE_NAME}" // Push the image to Docker Hub
                         } else {
-                            echo "Not a valid branch for pushing images."
+                            echo "Not a valid branch for pushing images. Current branch: ${branch}"
                         }
                     }
                 }
