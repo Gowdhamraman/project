@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t project-app .
+docker build -t gowdhamr/project-app:latest .
