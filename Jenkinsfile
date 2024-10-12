@@ -12,7 +12,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout the code from the repository
+                    // Checkout the code from the specified branch
                     git branch: env.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
                 }
             }
@@ -30,20 +30,21 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    // Docker login and push based on the branch
+                    // Log in to Docker Hub
                     withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
                         
+                        // Check which branch we're working on and push accordingly
                         if (env.BRANCH_NAME == 'dev') {
-                            echo "Pushing to the development repository..."
+                            echo "Pushing to development repository..."
                             sh "docker tag project-app ${DEV_IMAGE_NAME}"
-                            sh "docker push ${DEV_IMAGE_NAME}"
-                        } else if (env.BRANCH_NAME == 'main') {
-                            echo "Pushing to the production repository..."
+                            sh "docker push ${DEV_IMAGE_NAME}" // Push the image to Docker Hub
+                        } else if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
+                            echo "Pushing to production repository..."
                             sh "docker tag project-app ${PROD_IMAGE_NAME}"
-                            sh "docker push ${PROD_IMAGE_NAME}"
+                            sh "docker push ${PROD_IMAGE_NAME}" // Push the image to Docker Hub
                         } else {
-                            echo "Invalid branch. Skipping Docker push."
+                            echo "Not a valid branch for pushing images."
                         }
                     }
                 }
@@ -53,7 +54,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy the application
+                    // Deploy the application using the deploy.sh script
                     sh './deploy.sh'
                 }
             }
