@@ -12,7 +12,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout the code from the specified branch
                     git branch: env.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
                 }
             }
@@ -21,8 +20,16 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image
                     sh './build.sh'
+                }
+            }
+        }
+
+        stage('Detect Branch') {  // Add this stage to debug branch detection
+            steps {
+                script {
+                    def branch = env.GIT_BRANCH ? env.GIT_BRANCH.split('/').last() : 'unknown'
+                    echo "Current branch is: ${branch}"  // Output the branch name
                 }
             }
         }
@@ -30,22 +37,22 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    // Log in to Docker Hub
                     withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
                         
-                        // Detect the branch from the environment (replace with the correct branch variable)
                         def branch = env.GIT_BRANCH ? env.GIT_BRANCH.split('/').last() : 'unknown'
 
-                        // Check which branch we're working on and push accordingly
+                        // Ensure the correct branch name is detected
+                        echo "Pushing based on branch: ${branch}"
+
                         if (branch == 'dev') {
                             echo "Pushing to development repository..."
                             sh "docker tag project-app ${DEV_IMAGE_NAME}"
-                            sh "docker push ${DEV_IMAGE_NAME}" // Push the image to Docker Hub
-                        } else if (branch == 'main') {
+                            sh "docker push ${DEV_IMAGE_NAME}"
+                        } else if (branch == 'main' || branch == 'master') {
                             echo "Pushing to production repository..."
                             sh "docker tag project-app ${PROD_IMAGE_NAME}"
-                            sh "docker push ${PROD_IMAGE_NAME}" // Push the image to Docker Hub
+                            sh "docker push ${PROD_IMAGE_NAME}"
                         } else {
                             echo "Not a valid branch for pushing images. Current branch: ${branch}"
                         }
@@ -57,7 +64,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy the application using the deploy.sh script
                     sh './deploy.sh'
                 }
             }
