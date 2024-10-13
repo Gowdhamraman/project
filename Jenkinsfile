@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'dev/main', description: 'Branch to build')
+        string(name: 'BRANCH_NAME', defaultValue: 'dev', description: 'Branch to build')
     }
 
     environment {
