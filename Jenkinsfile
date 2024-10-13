@@ -26,6 +26,14 @@ pipeline {
             }
         }
 
+        stage('Debug Branch') {  
+            steps {
+                script {
+                    sh "echo 'Current branch: ${env.BRANCH_NAME}'"
+                }
+            }
+        }
+
         stage('Push to Docker Hub') {
             steps {
                 script {
@@ -44,6 +52,8 @@ pipeline {
                             echo "Pushing to production repository..."
                             sh "docker tag ${DOCKER_IMAGE_NAME} ${PROD_IMAGE_NAME}"
                             sh "docker push ${PROD_IMAGE_NAME}"
+                        } else {
+                            echo "No valid branch detected for pushing images."
                         }
                     }
                 }
