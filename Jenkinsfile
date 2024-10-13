@@ -17,7 +17,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Use the branch name parameter to check out the correct branch
                     git branch: params.BRANCH_NAME, url: env.GITHUB_REPO_URL
                 }
             }
@@ -56,7 +55,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy the application using deploy.sh
+                    // Deploy the docker
                     sh './deploy.sh'
                 }
             }
