@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Branch to build')
+    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-logins')
         DOCKER_IMAGE = 'gowdhamr/project-app'
@@ -9,7 +12,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                script {
+                    checkout([$class: 'GitSCM', branches: [[name: "${params.BRANCH_NAME}"]], userRemoteConfigs: [[url: 'https://github.com/Gowdhamraman/project.git']]])
+                }
             }
         }
         stage('Build Docker Image') {
@@ -26,7 +31,7 @@ pipeline {
         }
         stage('Push to Docker Hub') {
             when {
-                branch 'dev'
+                expression { env.BRANCH_NAME == 'dev' }
             }
             steps {
                 script {
@@ -39,7 +44,7 @@ pipeline {
         }
         stage('Push to Production') {
             when {
-                branch 'main'
+                expression { env.BRANCH_NAME == 'main' }
             }
             steps {
                 script {
