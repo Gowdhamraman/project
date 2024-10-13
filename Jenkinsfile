@@ -17,7 +17,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Check out the specific branch
+                    // specific branch
                     git branch: params.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
                 }
             }
