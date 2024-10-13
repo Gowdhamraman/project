@@ -17,7 +17,11 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
+<<<<<<< HEAD
                     git branch: params.BRANCH_NAME, url: env.GITHUB_REPO_URL
+=======
+                    git branch: params.BRANCH_NAME ?: 'dev', url: env.GITHUB_REPO_URL
+>>>>>>> dev
                 }
             }
         }
@@ -25,7 +29,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+<<<<<<< HEAD
                     sh './build.sh'  // Ensure this script builds and tags the image as $DOCKER_IMAGE_NAME
+=======
+                    sh './build.sh' // Builds and tags the image for dev or prod
+>>>>>>> dev
                 }
             }
         }
@@ -37,15 +45,11 @@ pipeline {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
 
                         if (params.BRANCH_NAME == 'dev') {
-                            echo "Pushing to development repository..."
-                            sh "docker tag ${DOCKER_IMAGE_NAME} ${DEV_IMAGE_NAME}"
+                            echo "Pushing to dev repo..."
                             sh "docker push ${DEV_IMAGE_NAME}"
-                        } else if (params.BRANCH_NAME == 'main' || params.BRANCH_NAME == 'prod') {
-                            echo "Pushing to production repository..."
-                            sh "docker tag ${DOCKER_IMAGE_NAME} ${PROD_IMAGE_NAME}"
+                        } else if (params.BRANCH_NAME == 'main') {
+                            echo "Pushing to prod repo..."
                             sh "docker push ${PROD_IMAGE_NAME}"
-                        } else {
-                            echo "Branch is not dev or main/prod, skipping push."
                         }
                     }
                 }
@@ -55,7 +59,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+<<<<<<< HEAD
                     // Deploy the docker
+=======
+>>>>>>> dev
                     sh './deploy.sh'
                 }
             }
@@ -64,10 +71,14 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Pipeline executed successfully.'
         }
         failure {
+<<<<<<< HEAD
             echo 'Pipeline was failed!'
+=======
+            echo 'Pipeline failed.'
+>>>>>>> dev
         }
     }
 }
