@@ -26,7 +26,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh './build.sh'  // Ensure this script builds and tags the image as $DOCKER_IMAGE_NAME
+                    sh './build.sh'  // build and tag image as $DOCKER_IMAGE_NAME
                 }
             }
         }
