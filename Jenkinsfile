@@ -12,8 +12,10 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the specific branch
-                git branch: env.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
+                script {
+                    // Checkout the code from the specific branch
+                    git branch: env.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
+                }
             }
         }
 
