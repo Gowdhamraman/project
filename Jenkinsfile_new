@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+    
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
+        GITHUB_CREDENTIALS = credentials('github-credentials')
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                sh './build.sh'
+            }
+        }
+        
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
+                        if (env.BRANCH_NAME == 'dev') {
+                            sh 'docker tag devops-app yourusername/dev:latest'
+                            sh 'docker push yourusername/dev:latest'
+                        } else if (env.BRANCH_NAME == 'master') {
+                            sh 'docker tag devops-app yourusername/prod:latest'
+                            sh 'docker push yourusername/prod:latest'
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                sh './deploy.sh'
+            }
+        }
+    }
+    
+    post {
+        always {
+            sh 'docker logout'
+        }
+    }
+}
