@@ -11,7 +11,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout the branch
                     checkout scm
                 }
             }
@@ -28,16 +27,15 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    // Check if branch is dev or main and push accordingly
                     if (env.GIT_BRANCH == 'origin/dev') {
-                        withCredentials([string(credentialsId: "$DOCKER_CREDENTIALS_ID", variable: 'DOCKER_PASS')]) {
-                            sh "echo $DOCKER_PASS | docker login -u gowdhamr --password-stdin"
+                        withCredentials([usernamePassword(credentialsId: "$DOCKER_CREDENTIALS_ID", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                            sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
                             sh 'docker tag project-app $DOCKER_DEV_REPO:latest'
                             sh 'docker push $DOCKER_DEV_REPO:latest'
                         }
                     } else if (env.GIT_BRANCH == 'origin/main') {
-                        withCredentials([string(credentialsId: "$DOCKER_CREDENTIALS_ID", variable: 'DOCKER_PASS')]) {
-                            sh "echo $DOCKER_PASS | docker login -u gowdhamr --password-stdin"
+                        withCredentials([usernamePassword(credentialsId: "$DOCKER_CREDENTIALS_ID", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                            sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
                             sh 'docker tag project-app $DOCKER_PROD_REPO:latest'
                             sh 'docker push $DOCKER_PROD_REPO:latest'
                         }
@@ -56,3 +54,4 @@ pipeline {
         }
     }
 }
+
