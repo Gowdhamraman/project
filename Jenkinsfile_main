@@ -1,0 +1,190 @@
+pipeline {
+    agent any
+
+    environment {
+<<<<<<< HEAD
+        DOCKER_CREDENTIALS_ID = 'docker-logins'
+        DEV_IMAGE_NAME = 'gowdhamr/dev:latest'
+        PROD_IMAGE_NAME = 'gowdhamr/prod:latest'
+        GITHUB_REPO_URL = 'https://github.com/Gowdhamraman/project.git'
+=======
+        DOCKERHUB_CREDENTIALS = credentials('docker-logins')
+        DOCKER_IMAGE = 'gowdhamr/project-app:latest' // Updated to include the tag
+        DEV_REPO = 'gowdhamr/dev'
+        PROD_REPO = 'gowdhamr/prod'
+>>>>>>> dev
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+<<<<<<< HEAD
+                    git branch: env.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
+=======
+                    checkout scm
+>>>>>>> dev
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+<<<<<<< HEAD
+                script {
+                    sh './build.sh'
+=======
+                sh './build.sh' // This builds and tags as gowdhamr/project-app:latest
+            }
+        }
+
+        stage('Debug Branch') {  
+            steps {
+                script {
+                    sh "echo 'Current branch: ${env.BRANCH_NAME}'"
+>>>>>>> dev
+                }
+            }
+        }
+
+<<<<<<< HEAD
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                        
+                        def branch = env.GIT_BRANCH ? env.GIT_BRANCH.split('/').last() : 'unknown'
+
+                        echo "Detected branch: ${branch}"
+
+                        if (branch == 'dev') {
+                            echo "Pushing to development repository..."
+                            sh "docker tag project-app ${DEV_IMAGE_NAME}"
+                            sh "docker push ${DEV_IMAGE_NAME}"
+                        } else if (branch == 'main' || branch == 'master') {
+                            echo "Pushing to production repository..."
+                            sh "docker tag project-app ${PROD_IMAGE_NAME}"
+                            sh "docker push ${PROD_IMAGE_NAME}"
+                        } else {
+                            echo "Not a valid branch for pushing images. Current branch: ${branch}"
+                        }
+=======
+        stage('Push to Docker Hub - Development') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                script {
+                    docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
+                        sh "docker tag ${DOCKER_IMAGE} ${DEV_REPO}:latest"
+                        sh "docker push ${DEV_REPO}:latest"
+>>>>>>> dev
+                    }
+                }
+            }
+        }
+
+<<<<<<< HEAD
+        stage('Deploy') {
+            steps {
+                script {
+                    sh './deploy.sh'
+=======
+        stage('Push to Docker Hub - Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
+                        sh "docker tag ${DOCKER_IMAGE} ${PROD_REPO}:latest"
+                        sh "docker push ${PROD_REPO}:latest"
+                    }
+>>>>>>> dev
+                }
+            }
+        }
+    }
+
+    post {
+<<<<<<< HEAD
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+=======
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('docker-logins')
+        DOCKER_IMAGE = 'gowdhamr/project-app:latest' // Updated to include the tag
+        DEV_REPO = 'gowdhamr/dev'
+        PROD_REPO = 'gowdhamr/prod'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    checkout scm
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh './build.sh' // This builds and tags as gowdhamr/project-app:latest
+            }
+        }
+
+        stage('Debug Branch') {  
+            steps {
+                script {
+                    sh "echo 'Current branch: ${env.BRANCH_NAME}'"
+                }
+            }
+        }
+
+        stage('Push to Docker Hub - Development') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                script {
+                    docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
+                        sh "docker tag ${DOCKER_IMAGE} ${DEV_REPO}:latest"
+                        sh "docker push ${DEV_REPO}:latest"
+                    }
+                }
+            }
+        }
+
+        stage('Push to Docker Hub - Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
+                        sh "docker tag ${DOCKER_IMAGE} ${PROD_REPO}:latest"
+                        sh "docker push ${PROD_REPO}:latest"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        sucess {
+            echo 'Pipeline was successful!'
+        }
+    }
+       failure {
+>>>>>>> dev
+            echo 'Pipeline failed!'
+        }
+    }
+}
+
