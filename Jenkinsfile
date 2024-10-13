@@ -17,8 +17,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Check out the specific branch
-                    git branch: params.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
+                    git branch: params.BRANCH_NAME ?: 'dev', url: env.GITHUB_REPO_URL
                 }
             }
         }
@@ -26,16 +25,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh './build.sh'  // Ensure this script builds and tags the image as $DOCKER_IMAGE_NAME
-                }
-            }
-        }
-
-        stage('Debug Branch') {
-            steps {
-                script {
-                    // Print the current branch for debugging purposes
-                    echo "Branch detected: ${params.BRANCH_NAME}"
+                    sh './build.sh' // Builds and tags the image for dev or prod
                 }
             }
         }
@@ -47,15 +37,11 @@ pipeline {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
 
                         if (params.BRANCH_NAME == 'dev') {
-                            echo "Pushing to development repository..."
-                            sh "docker tag ${DOCKER_IMAGE_NAME} ${DEV_IMAGE_NAME}"
+                            echo "Pushing to dev repo..."
                             sh "docker push ${DEV_IMAGE_NAME}"
-                        } else if (params.BRANCH_NAME == 'main' || params.BRANCH_NAME == 'prod') {
-                            echo "Pushing to production repository..."
-                            sh "docker tag ${DOCKER_IMAGE_NAME} ${PROD_IMAGE_NAME}"
+                        } else if (params.BRANCH_NAME == 'main') {
+                            echo "Pushing to prod repo..."
                             sh "docker push ${PROD_IMAGE_NAME}"
-                        } else {
-                            echo "Branch is not dev or main/prod, skipping push."
                         }
                     }
                 }
@@ -65,17 +51,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy the application using deploy.sh
                     sh './deploy.sh'
-                }
-            }
-        }
-
-        stage('Debug Environment') {
-            steps {
-                script {
-                    // Print all for debug
-                    sh "env"
                 }
             }
         }
@@ -83,10 +59,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Pipeline executed successfully.'
         }
         failure {
-            echo 'Pipeline failed!'
+            echo 'Pipeline failed.'
         }
     }
 }
