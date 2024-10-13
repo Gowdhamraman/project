@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'docker-loginx'
+        DOCKER_CREDENTIALS_ID = 'docker-logins'
         DEV_IMAGE_NAME = 'gowdhamr/dev:latest'
         PROD_IMAGE_NAME = 'gowdhamr/prod:latest' 
         GITHUB_REPO_URL = 'https://github.com/Gowdhamraman/project.git' 
