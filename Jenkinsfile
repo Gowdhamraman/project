@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Branch to build')
+        string(name: 'BRANCH_NAME', defaultValue: 'dev', description: 'Branch to build')
     }
 
     environment {
@@ -17,11 +17,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-<<<<<<< HEAD
-                    git branch: params.BRANCH_NAME, url: env.GITHUB_REPO_URL
-=======
                     git branch: params.BRANCH_NAME ?: 'dev', url: env.GITHUB_REPO_URL
->>>>>>> dev
                 }
             }
         }
@@ -29,11 +25,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-<<<<<<< HEAD
-                    sh './build.sh'  // Ensure this script builds and tags the image as $DOCKER_IMAGE_NAME
-=======
                     sh './build.sh' // Builds and tags the image for dev or prod
->>>>>>> dev
                 }
             }
         }
@@ -59,10 +51,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-<<<<<<< HEAD
-                    // Deploy the docker
-=======
->>>>>>> dev
                     sh './deploy.sh'
                 }
             }
@@ -74,11 +62,7 @@ pipeline {
             echo 'Pipeline executed successfully.'
         }
         failure {
-<<<<<<< HEAD
-            echo 'Pipeline was failed!'
-=======
             echo 'Pipeline failed.'
->>>>>>> dev
         }
     }
 }
