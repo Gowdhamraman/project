@@ -8,15 +8,16 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS_ID = 'docker-logins'
         DEV_IMAGE_NAME = 'gowdhamr/dev:latest'
-        PROD_IMAGE_NAME = 'gowdhamr/prod:latest' 
-        GITHUB_REPO_URL = 'https://github.com/Gowdhamraman/project.git' 
-        DOCKER_IMAGE_NAME = 'gowdhamr/project-app:latest'  // Define the Docker image name
+        PROD_IMAGE_NAME = 'gowdhamr/prod:latest'
+        GITHUB_REPO_URL = 'https://github.com/Gowdhamraman/project.git'
+        DOCKER_IMAGE_NAME = 'gowdhamr/project-app:latest'
     }
 
     stages {
         stage('Checkout') {
             steps {
                 script {
+                    // Check out the specific branch
                     git branch: params.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
                 }
             }
@@ -30,10 +31,11 @@ pipeline {
             }
         }
 
-        stage('Debug Branch') {  
+        stage('Debug Branch') {
             steps {
                 script {
-                    sh "echo 'Current branch: ${params.BRANCH_NAME}'"
+                    // Print the current branch for debugging purposes
+                    echo "Branch detected: ${params.BRANCH_NAME}"
                 }
             }
         }
@@ -44,20 +46,16 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
 
-                        // Determine which image to push based on the branch
                         if (params.BRANCH_NAME == 'dev') {
-                            echo "Detected branch: dev"
                             echo "Pushing to development repository..."
                             sh "docker tag ${DOCKER_IMAGE_NAME} ${DEV_IMAGE_NAME}"
                             sh "docker push ${DEV_IMAGE_NAME}"
-                        } 
-                        else if (params.BRANCH_NAME == 'main') {  // If your branch is 'main'
-                            echo "Detected branch: main"
+                        } else if (params.BRANCH_NAME == 'main' || params.BRANCH_NAME == 'prod') {
                             echo "Pushing to production repository..."
                             sh "docker tag ${DOCKER_IMAGE_NAME} ${PROD_IMAGE_NAME}"
                             sh "docker push ${PROD_IMAGE_NAME}"
                         } else {
-                            echo "No valid branch detected for pushing images."
+                            echo "Branch is not dev or main/prod, skipping push."
                         }
                     }
                 }
@@ -73,10 +71,11 @@ pipeline {
             }
         }
 
-        stage('Debug Environment') {  // Added for debugging purposes
+        stage('Debug Environment') {
             steps {
                 script {
-                    sh "env"  // Print all environment variables
+                    // Print all environment variables for debugging
+                    sh "env"
                 }
             }
         }
