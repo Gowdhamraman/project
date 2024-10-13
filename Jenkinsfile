@@ -1,12 +1,8 @@
 pipeline {
     agent any
 
-    parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Branch to build')
-    }
-
     environment {
-        DOCKER_CREDENTIALS_ID = 'docker-logins'
+        DOCKER_CREDENTIALS_ID = 'docker-loginx'
         DEV_IMAGE_NAME = 'gowdhamr/dev:latest'
         PROD_IMAGE_NAME = 'gowdhamr/prod:latest' 
         GITHUB_REPO_URL = 'https://github.com/Gowdhamraman/project.git' 
@@ -16,22 +12,24 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                script {
-                    git branch: params.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
-                }
+                // Checkout the code from the specific branch
+                git branch: env.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh './build.sh'  // Ensure this script builds and tags the image as $DOCKER_IMAGE_NAME
+                script {
+                    // Build the Docker image
+                    sh './build.sh'  // Ensure this script builds and tags the image as $DOCKER_IMAGE_NAME
+                }
             }
         }
 
         stage('Debug Branch') {  
             steps {
                 script {
-                    sh "echo 'Current branch: ${params.BRANCH_NAME}'"
+                    sh "echo 'Current branch: ${env.BRANCH_NAME}'"
                 }
             }
         }
@@ -43,13 +41,13 @@ pipeline {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
 
                         // Determine which image to push based on the branch
-                        if (params.BRANCH_NAME == 'dev') {
+                        if (env.BRANCH_NAME == 'dev') {
                             echo "Detected branch: dev"
                             echo "Pushing to development repository..."
                             sh "docker tag ${DOCKER_IMAGE_NAME} ${DEV_IMAGE_NAME}"
                             sh "docker push ${DEV_IMAGE_NAME}"
                         } 
-                        else if (params.BRANCH_NAME == 'main') {  // If your branch is 'main'
+                        else if (env.BRANCH_NAME == 'main') {  // If your branch is 'main'
                             echo "Detected branch: main"
                             echo "Pushing to production repository..."
                             sh "docker tag ${DOCKER_IMAGE_NAME} ${PROD_IMAGE_NAME}"
