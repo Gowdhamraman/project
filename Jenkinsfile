@@ -1,63 +1,134 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Branch to build')
-    }
+
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-logins')
-        DOCKER_IMAGE = 'gowdhamr/project-app'
+        DOCKER_IMAGE = 'gowdhamr/project-app:latest' // Updated to include the tag
         DEV_REPO = 'gowdhamr/dev'
         PROD_REPO = 'gowdhamr/prod'
     }
+
     stages {
         stage('Checkout') {
             steps {
                 script {
-                    checkout([$class: 'GitSCM', branches: [[name: "${params.BRANCH_NAME}"]], userRemoteConfigs: [[url: 'https://github.com/Gowdhamraman/project.git']]])
+                    checkout scm
                 }
             }
         }
+
         stage('Build Docker Image') {
             steps {
-                sh './build.sh'
+                sh './build.sh' // This builds and tags as gowdhamr/project-app:latest
             }
         }
-        stage('Debug Branch') {  // Add this stage for debugging
+
+        stage('Debug Branch') {  
             steps {
                 script {
                     sh "echo 'Current branch: ${env.BRANCH_NAME}'"
                 }
             }
         }
-        stage('Push to Docker Hub') {
+
+        stage('Push to Docker Hub - Development') {
             when {
-                expression { env.BRANCH_NAME == 'dev' }
+                branch 'dev'
             }
             steps {
                 script {
                     docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
-                        sh "docker tag ${DOCKER_IMAGE}:latest ${DEV_REPO}:latest"
+                        sh "docker tag ${DOCKER_IMAGE} ${DEV_REPO}:latest"
                         sh "docker push ${DEV_REPO}:latest"
                     }
                 }
             }
         }
-        stage('Push to Production') {
+
+        stage('Push to Docker Hub - Production') {
             when {
-                expression { env.BRANCH_NAME == 'main' }
+                branch 'main'
             }
             steps {
                 script {
                     docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
-                        sh "docker tag ${DOCKER_IMAGE}:latest ${PROD_REPO}:latest"
+                        sh "docker tag ${DOCKER_IMAGE} ${PROD_REPO}:latest"
                         sh "docker push ${PROD_REPO}:latest"
                     }
                 }
             }
         }
     }
+
     post {
-        failure {
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('docker-logins')
+        DOCKER_IMAGE = 'gowdhamr/project-app:latest' // Updated to include the tag
+        DEV_REPO = 'gowdhamr/dev'
+        PROD_REPO = 'gowdhamr/prod'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    checkout scm
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh './build.sh' // This builds and tags as gowdhamr/project-app:latest
+            }
+        }
+
+        stage('Debug Branch') {  
+            steps {
+                script {
+                    sh "echo 'Current branch: ${env.BRANCH_NAME}'"
+                }
+            }
+        }
+
+        stage('Push to Docker Hub - Development') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                script {
+                    docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
+                        sh "docker tag ${DOCKER_IMAGE} ${DEV_REPO}:latest"
+                        sh "docker push ${DEV_REPO}:latest"
+                    }
+                }
+            }
+        }
+
+        stage('Push to Docker Hub - Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
+                        sh "docker tag ${DOCKER_IMAGE} ${PROD_REPO}:latest"
+                        sh "docker push ${PROD_REPO}:latest"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        sucess {
+            echo 'Pipeline was successful!'
+        }
+    }
+       failure {
             echo 'Pipeline failed!'
         }
     }
