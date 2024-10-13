@@ -74,7 +74,7 @@ pipeline {
         stage('Debug Environment') {
             steps {
                 script {
-                    // Print all environment variables for debugging
+                    // Print all for debug
                     sh "env"
                 }
             }
