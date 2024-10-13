@@ -3,17 +3,16 @@ pipeline {
 
     environment {
         DOCKER_CREDENTIALS_ID = 'docker-logins'
-        DEV_IMAGE_NAME = 'gowdhamr/dev:latest'
-        PROD_IMAGE_NAME = 'gowdhamr/prod:latest'
-        GITHUB_REPO_URL = 'https://github.com/Gowdhamraman/project.git'
+        DOCKER_DEV_REPO = 'gowdhamr/dev'
+        DOCKER_PROD_REPO = 'gowdhamr/prod'
     }
 
     stages {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout the code from the specified branch
-                    git branch: env.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
+                    // Checkout the branch
+                    checkout scm
                 }
             }
         }
@@ -21,8 +20,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image
-                    sh './build.sh'
+                    sh './build.sh'  // Using the build.sh script to build the image
                 }
             }
         }
@@ -30,35 +28,20 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    // Log in to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
-                        
-                        // Detect the branch from the environment (replace with the correct branch variable)
-                        def branch = env.GIT_BRANCH ? env.GIT_BRANCH.split('/').last() : 'unknown'
-
-                        // Check which branch we're working on and push accordingly
-                        if (branch == 'dev') {
-                            echo "Pushing to development repository..."
-                            sh "docker tag project-app ${DEV_IMAGE_NAME}"
-                            sh "docker push ${DEV_IMAGE_NAME}" // Push the image to Docker Hub
-                        } else if (branch == 'main') {
-                            echo "Pushing to production repository..."
-                            sh "docker tag project-app ${PROD_IMAGE_NAME}"
-                            sh "docker push ${PROD_IMAGE_NAME}" // Push the image to Docker Hub
-                        } else {
-                            echo "Not a valid branch for pushing images. Current branch: ${branch}"
+                    // Check if branch is dev or main and push accordingly
+                    if (env.GIT_BRANCH == 'origin/dev') {
+                        withCredentials([string(credentialsId: "$DOCKER_CREDENTIALS_ID", variable: 'DOCKER_PASS')]) {
+                            sh "echo $DOCKER_PASS | docker login -u gowdhamr --password-stdin"
+                            sh 'docker tag project-app $DOCKER_DEV_REPO:latest'
+                            sh 'docker push $DOCKER_DEV_REPO:latest'
+                        }
+                    } else if (env.GIT_BRANCH == 'origin/main') {
+                        withCredentials([string(credentialsId: "$DOCKER_CREDENTIALS_ID", variable: 'DOCKER_PASS')]) {
+                            sh "echo $DOCKER_PASS | docker login -u gowdhamr --password-stdin"
+                            sh 'docker tag project-app $DOCKER_PROD_REPO:latest'
+                            sh 'docker push $DOCKER_PROD_REPO:latest'
                         }
                     }
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                script {
-                    // Deploy the application using the deploy.sh script
-                    sh './deploy.sh'
                 }
             }
         }
@@ -66,11 +49,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo "Pipeline completed successfully!"
         }
         failure {
-            echo 'Pipeline failed!'
+            echo "Pipeline failed!"
         }
     }
 }
-
