@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'docker-loginx'
+        DOCKER_CREDENTIALS_ID = 'docker-logins'
         DEV_IMAGE_NAME = 'gowdhamr/dev:latest'
         PROD_IMAGE_NAME = 'gowdhamr/prod:latest' 
         GITHUB_REPO_URL = 'https://github.com/Gowdhamraman/project.git' 
@@ -13,7 +13,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the code from the specific branch
-                git branch: env.BRANCH_NAME, url: env.GITHUB_REPO_URL
+                git branch: env.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
             }
         }
 
@@ -30,14 +30,16 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
 
                         // Determine which image to push based on the branch
                         if (env.BRANCH_NAME == 'dev') {
+                            echo "Detected branch: dev"
+                            echo "Pushing to development repository..."
                             sh "docker tag ${DOCKER_IMAGE_NAME} ${DEV_IMAGE_NAME}"
                             sh "docker push ${DEV_IMAGE_NAME}"
                         } 
-                        else if (env.BRANCH_NAME == 'main') {
+                        else if (env.BRANCH_NAME == 'main') {  // If your branch is 'main'
                             echo "Detected branch: main"
                             echo "Pushing to production repository..."
                             sh "docker tag ${DOCKER_IMAGE_NAME} ${PROD_IMAGE_NAME}"
