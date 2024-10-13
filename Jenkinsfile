@@ -17,6 +17,13 @@ pipeline {
                 sh './build.sh'
             }
         }
+        stage('Debug Branch') {  // Add this stage for debugging
+            steps {
+                script {
+                    sh "echo 'Current branch: ${env.BRANCH_NAME}'"
+                }
+            }
+        }
         stage('Push to Docker Hub') {
             when {
                 branch 'dev'
