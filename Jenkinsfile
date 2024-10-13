@@ -1,56 +1,52 @@
 pipeline {
     agent any
-
     environment {
-        DOCKER_CREDENTIALS_ID = 'docker-logins'
-        DOCKER_DEV_REPO = 'gowdhamr/dev'
-        DOCKER_PROD_REPO = 'gowdhamr/prod'
+        DOCKERHUB_CREDENTIALS = credentials('docker-logins')
+        DOCKER_IMAGE = 'gowdhamr/project-app'
+        DEV_REPO = 'gowdhamr/dev'
+        PROD_REPO = 'gowdhamr/prod'
     }
-
     stages {
         stage('Checkout') {
             steps {
-                script {
-                    checkout scm
-                }
+                checkout scm
             }
         }
-
         stage('Build Docker Image') {
             steps {
+                sh './build.sh'
+            }
+        }
+        stage('Push to Docker Hub') {
+            when {
+                branch 'dev'
+            }
+            steps {
                 script {
-                    sh './build.sh'  // Using the build.sh script to build the image
+                    docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
+                        sh "docker tag ${DOCKER_IMAGE}:latest ${DEV_REPO}:latest"
+                        sh "docker push ${DEV_REPO}:latest"
+                    }
                 }
             }
         }
-
-        stage('Push to Docker Hub') {
+        stage('Push to Production') {
+            when {
+                branch 'main'
+            }
             steps {
                 script {
-                    if (env.GIT_BRANCH == 'origin/dev') {
-                        withCredentials([usernamePassword(credentialsId: "$DOCKER_CREDENTIALS_ID", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                            sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
-                            sh 'docker tag project-app $DOCKER_DEV_REPO:latest'
-                            sh 'docker push $DOCKER_DEV_REPO:latest'
-                        }
-                    } else if (env.GIT_BRANCH == 'origin/main') {
-                        withCredentials([usernamePassword(credentialsId: "$DOCKER_CREDENTIALS_ID", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                            sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
-                            sh 'docker tag project-app $DOCKER_PROD_REPO:latest'
-                            sh 'docker push $DOCKER_PROD_REPO:latest'
-                        }
+                    docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
+                        sh "docker tag ${DOCKER_IMAGE}:latest ${PROD_REPO}:latest"
+                        sh "docker push ${PROD_REPO}:latest"
                     }
                 }
             }
         }
     }
-
     post {
-        success {
-            echo "Pipeline completed successfully!"
-        }
         failure {
-            echo "Pipeline failed!"
+            echo 'Pipeline failed!'
         }
     }
 }
