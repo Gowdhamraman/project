@@ -17,8 +17,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // specific branch
-                    git branch: params.BRANCH_NAME ?: 'main', url: env.GITHUB_REPO_URL
+                    // Use the branch name parameter to check out the correct branch
+                    git branch: params.BRANCH_NAME, url: env.GITHUB_REPO_URL
                 }
             }
         }
@@ -26,16 +26,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh './build.sh'  // build and tag image as $DOCKER_IMAGE_NAME
-                }
-            }
-        }
-
-        stage('Debug Branch') {
-            steps {
-                script {
-                    // Print the current branch for debugging purposes
-                    echo "Branch detected: ${params.BRANCH_NAME}"
+                    sh './build.sh'  // Ensure this script builds and tags the image as $DOCKER_IMAGE_NAME
                 }
             }
         }
@@ -67,15 +58,6 @@ pipeline {
                 script {
                     // Deploy the application using deploy.sh
                     sh './deploy.sh'
-                }
-            }
-        }
-
-        stage('Debug Environment') {
-            steps {
-                script {
-                    // Print all for debug
-                    sh "env"
                 }
             }
         }
