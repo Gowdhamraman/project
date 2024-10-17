@@ -16,6 +16,6 @@ receivers:
         from: 'gowdhamraman93@gmail.com'
         smarthost: 'smtp.gmail.com:587'
         auth_username: 'gowdhamraman93@gmail.com'
-        auth_password: 'tyce zgok mdhk siek'  # Use an App Password if using Gmail with 2FA
-        require_tls: true  # This should be inside email_configs
+        auth_password: '***************'  
+        require_tls: true  
         send_resolved: true
