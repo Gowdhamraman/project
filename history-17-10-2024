@@ -1,0 +1,342 @@
+root@ip-172-31-3-196:/etc/prometheus# history
+    1  docker version
+    2  sudo docker run hello-world
+    3  docker compose version
+    4  docker ps
+    5  cd /home/ubuntu/project/
+    6  docker compose down
+    7  docker compose up -d
+    8  docker compose down
+    9  url -v telnet://smtp.gmail.com:587
+   10  curl -v telnet://smtp.gmail.com:587
+   11  cd /etc/prometheus/
+   12  ls
+   13  cat alert.rules.yml 
+   14  cat prometheus.yml 
+   15  cat alertmanager
+   16  cat alertmanager.yml 
+   17  vi alertmanager.yml 
+   18  systemctl daemon-reload
+   19  systemctl restart preometheus
+   20  systemctl restart prometheus
+   21  systemctl status prometheus
+   22  nano alertmanager.yml 
+   23  cat alertmanager.yml 
+   24  systemctl restart prometheus
+   25  systemctl daemon-reload
+   26  systemctl restart prometheus
+   27  cd /home/ubuntu/project/
+   28  ls
+   29  docker compose up -d
+   30  docker compose down
+   31  docker compose up
+   32  docker compose up -d
+   33  ls
+   34  cd /etc/prometheus/
+   35  ls
+   36  git init
+   37  git remote -v 
+   38  git config --global user.name "Gowdhamraman"
+   39  git config --global user.email "gowdham93@gmail.com"
+   40  git init
+   41  git remote -v
+   42  git remote set-url origin https://github.com/Gowdhamraman/project.git
+   43  git config --global --add safe.directory /etc/prometheus
+   44  git config --global --get-all safe.directory
+   45  git remote set-url origin https://github.com/Gowdhamraman/project.git
+   46  git remote set-url  https://github.com/Gowdhamraman/project.git
+   47  git remote set-url  add https://github.com/Gowdhamraman/project.git
+   48  git remote -v
+   49  git remote add origin https://github.com/Gowdhamraman/project.git
+   50  git remote -v
+   51  git checkout devops
+   52  git checkout -b alert
+   53  git status
+   54  got add .
+   55  git add .
+   56  git commit -m "Prometheus, grafana and alertmanager"
+   57  ls
+   58  git status
+   59  git push
+   60  histor
+
+
+
+
+
+
+
+[200~root@ip-172-31-3-196:/etc/prometheus# history
+    1  cd /etc/grafana/
+    2  cat grafana.ini 
+    3  telnet smtp.gmail.com 587
+    4  nano grafana.ini 
+    5  sudo systemctl restart grafana-server
+    6  sudo systemctl status grafana-server
+    7  docker ps
+    8  cd /home/ubuntu/project/
+    9  docker composer up -d
+   10  docker compose up -d
+   11  cd /etc/prometheus/
+   12  l
+   13  ll
+   14  cat alertmanager.yml 
+   15  nano alertmanager.yml 
+   16  ./alertmanager --config.file=alertmanager.yml
+   17  ls
+   18  cd
+   19  ls
+   20  curl http://52.66.237.34:9093/api/v2/alerts
+   21  alertmanager --version
+   22  wget https://github.com/prometheus/alertmanager/releases/download/vX.Y.Z/alertmanager-X.Y.Z.linux-amd64.tar.gz
+   23  wget https://github.com/prometheus/alertmanager/releases/download/v0.20.0/alertmanager-X.Y.Z.linux-amd64.tar.gz
+   24  wget https://github.com/prometheus/alertmanager/releases/download/v0.27.0/alertmanager-0.27.0.linux-amd64.tar.gz
+   25  tar -xvf alertmanager-0.27.0.linux-amd64.tar.gz 
+   26  mv alertmanager-0.27.0.linux-amd64/alertmanager /usr/local/bin/
+   27  mv alertmanager-0.27.0.linux-amd64//amtool /usr/local/bin/
+   28  alertmanager --version
+   29  alertmanager --config.file=/etc/prometheus/alertmanager.yml
+   30  sudo systemctl restart prometheus 
+   31  ls
+   32  cd /etc/alertmanager/
+   33  ls
+   34  cat alertmanager.yml 
+   35  ls
+   36  cd ..
+   37  cd prometheus/
+   38  ls
+   39  cat alertmanager
+   40  cat alertmanager.yml 
+   41  curl -v telnet://smtp.gmail.com:587
+   42  alertmanager --config.file=/etc/prometheus/alertmanager.yml
+   43  sudo lsof -i :9094
+   44  sudo systemctl stop alertmanager
+   45  alertmanager --config.file=/etc/prometheus/alertmanager.yml
+   46  sudo lsof -i :9094
+   47  sudo kill -9 17008
+   48  sudo systemctl stop alertmanager
+   49  nano /etc/prometheus/alertmanager.yml
+   50  alertmanager --config.file=/etc/prometheus/alertmanager.yml
+   51  vi alertmanager
+   52  ls
+   53  vi alertmanager.yml 
+   54  nano alertmanager.yml 
+   55  yamllint /etc/prometheus/alertmanager.yml
+   56  apt install yamllint
+   57  yamllint /etc/prometheus/alertmanager.yml
+   58  nano alertmanager.yml 
+   59  yamllint /etc/prometheus/alertmanager.yml
+   60  nano alertmanager.yml 
+   61  alertmanager --config.file=/etc/prometheus/alertmanager.yml
+   62  nano alertmanager.yml 
+   63  alertmanager --config.file=/etc/prometheus/alertmanager.yml
+   64  alertmanager -d --config.file=/etc/prometheus/alertmanager.yml
+   65  alertmanager  --config.file=/etc/prometheus/alertmanager.yml
+   66  yamllint /etc/prometheus/alertmanager.yml
+   67  vi alertmanager.yml 
+   68  yamllint /etc/prometheus/alertmanager.yml
+   69  nano alertmanager.yml 
+   70  yamllint /etc/prometheus/alertmanager.yml
+   71  alertmanager  --config.file=/etc/prometheus/alertmanager.yml
+   72  nano alertmanager.yml 
+   73  alertmanager  --config.file=/etc/prometheus/alertmanager.yml
+   74  tail -f /var/log/alertmanager.log
+   75  cat  alertmanager.yml 
+   76  nano alertmanager.yml 
+   77  alertmanager  --config.file=/etc/prometheus/alertmanager.yml
+   78  ls
+   79  history
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ubuntu@ip-172-31-3-196:/etc/grafana$ history
+    1  docker version
+    2  docker compose version
+    3  docker compose up -d
+    4  docker ps
+    5  cd
+    6  vi prometheus.yml
+    7  vi prometheus.yml 
+    8  pwd
+    9  docker run     -p 9090:9090     -v /home/ubuntu/prometheus.yml:/etc/prometheus/prometheus.yml     -v prometheus-data:/prometheus     prom/prometheus
+   10  docker ps
+   11  docker pull prom/node-exporter
+   12  docker run -d   --net="host"   --pid="host"   -v "/:/host:ro,rslave"   quay.io/prometheus/node-exporter:latest   --path.rootfs=/host
+   13  docker ps
+   14  docker run  -d   -p 9090:9090     -v /home/ubuntu/prometheus.yml:/etc/prometheus/prometheus.yml     -v prometheus-data:/prometheus     prom/prometheus
+   15  nano prometheus.yml 
+   16  docker ps 
+   17  docker stop 7a 9e
+   18  docker rm 7a 9e
+   19  docker images
+   20  docker rimi 40 71 d3
+   21  docker rimi 40 71 d2
+   22  docker rmi 40 71 d2
+   23  docker ps -a
+   24  docker rm 02
+   25  docker image ls
+   26  docker rmi 71 40 
+   27  docker images
+   28  docker rmi -f 
+   29  docker rmi -f 71
+   30  docker images
+   31  sudo groupadd --system prometheus
+   32  sudo useradd -s /sbin/nologin --system -g prometheus prometheus
+   33  sudo mkdir /etc/prometheus
+   34  sudo mkdir /var/lib/prometheus
+   35  wget https://github.com/prometheus/prometheus/releases/download/v2.43.0/prometheus-2.54.0.linux-amd64.tar.gz
+   36  wget https://github.com/prometheus/prometheus/releases/download/v2.54.0/prometheus-2.54.0.linux-amd64.tar.gz
+   37  tar vxf prometheus*.tar.gz
+   38  cd prometheus*/
+   39  sudo mv prometheus /usr/local/bin
+   40  sudo mv promtool /usr/local/bin
+   41  sudo chown prometheus:prometheus /usr/local/bin/prometheus
+   42  sudo chown prometheus:prometheus /usr/local/bin/promtool
+   43  sudo mv consoles /etc/prometheus
+   44  sudo mv console_libraries /etc/prometheus
+   45  sudo mv prometheus.yml /etc/prometheus
+   46  sudo chown prometheus:prometheus /etc/prometheus
+   47  sudo chown -R prometheus:prometheus /etc/prometheus/consoles
+   48  sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
+   49  sudo chown -R prometheus:prometheus /var/lib/prometheus
+   50  sudo nano /etc/prometheus/prometheus.yml
+   51  sudo nano /etc/systemd/system/prometheus.service
+   52  sudo systemctl daemon-reload
+   53  sudo systemctl enable prometheus
+   54  sudo systemctl start prometheus
+   55  sudo systemctl status prometheus
+   56  sudo apt update -y && sudo apt upgrade -y
+   57  sudo apt install -y apt-transport-https software-properties-common wget
+   58  sudo mkdir -p /etc/apt/keyrings/
+   59  wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+   60  echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+   61  sudo apt update
+   62  sudo apt install grafana
+   63  sudo grafana-server -v
+   64  sudo systemctl start grafana-server
+   65  sudo systemctl enable grafana-server
+   66  sudo systemctl status grafana-server
+   67  cd
+   68  sudo wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+   69  sudo tar xzf node_exporter-1.7.0.linux-amd64.tar.gz
+   70  sudo mv node_exporter-1.7.0.linux-amd64 /etc/node_exporter
+   71  sudo nano /etc/systemd/system/node_exporter.service
+   72  sudo systemctl daemon-reload
+   73  sudo systemctl enable node_exporter
+   74  sudo systemctl restart node_exporter
+   75  sudo systemctl status node_exporter
+   76  ls
+   77  docker ps
+   78  ls
+   79  mkdir cadvisor
+   80  cd cadvisor/
+   81  vi docker-compose.yml
+   82  docker compose up -d
+   83  docker ps
+   84  docker ps -a
+   85  docker images
+   86  nano /etc/prometheus/prometheus.yml 
+   87  sudo systemctl daemon-reload
+   88  sudo systemctl restart prometheus
+   89  sudo systemctl status prometheus
+   90  docker compose up -d
+   91  docker ps
+   92  sudo docker run      --volume=/:/rootfs:ro      --volume=/var/run:/var/run:ro      --volume=/sys:/sys:ro      --volume=/var/lib/docker/:/var/lib/docker:ro      --volume=/dev/disk/:/dev/disk:ro      --publish=8080:8080      --detach=true      --name=cadvisor      --restart=always      gcr.io/cadvisor/cadvisor:latest
+   93  docker ps
+   94  docker ps -a
+   95  docker rm 0b
+   96  docker ps -a
+   97  docker rm ab
+   98  sudo nano /etc/alertmanager/alertmanager.yml
+   99  cd /etc/prometheus/
+  100  ls
+  101  vi alert.rules.yml
+  102  sudo vi alert.rules.yml
+  103  cd ..
+  104  ls
+  105  sudo apt install prometheus-alertmanager
+  106  sudo service prometheus-alertmanager status
+  107  ls
+  108  cd prometheus/
+  109  ls
+  110  cat alert.rules.yml 
+  111  cat alertmanager
+  112  cat alertmanager.yml 
+  113  sudo mkdir /etc/alertmanager
+  114  sudo nano /etc/alertmanager/alertmanager.yml
+  115  sudo systemctl daemon-reload
+  116  sudo systemctl restart prometheus
+  117  sudo systemctl status prometheus
+  118  docker ps
+  119  cd /home/ubuntu/project/
+  120  docker ps
+  121  docker compose down
+  122  ls
+  123  ./alertmanager --config.file=alertmanager.yml --log.level=debug
+  124  cd
+  125  la
+  126  cd /etc/prometheus/
+  127  ./alertmanager --config.file=alertmanager.yml --log.level=debug
+  128  ls
+  129  ./alertmanager --config.file=alertmanager.yml
+  130  which alertmanager
+  131  sudo find / -name alertmanager
+  132  /usr/share/prometheus/alertmanager --config.file=alertmanager.yml
+  133  alertmanager --config.file=/etc/prometheus/alertmanager.yml
+  134  /usr/lib/prometheus/alertmanager --config.file=alertmanager.yml
+  135  ./alertmanager --config.file=alertmanager.yml
+  136  cd ..
+  137  ls
+  138  cd grafana/
+  139  ls
+  140  cat grafana.ini 
+  141  sudo -i
+  142  history
+ubuntu@ip-172-31
+
+
+
+
+root@ip-172-31-3-196:/etc/systemd/system# cat prometheus.service 
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+    --config.file /etc/prometheus/prometheus.yml \
+    --storage.tsdb.path /var/lib/prometheus/ \
+    --web.console.templates=/etc/prometheus/consoles \
+    --web.console.libraries=/etc/prometheus/console_libraries
+
+[Install]
+WantedBy=multi-user.target
+root@ip-172-31-3-196:/etc/systemd/system# cat node_exporter.service 
+[Unit]
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/etc/node_exporter/node_exporter
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
