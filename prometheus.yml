@@ -1,0 +1,39 @@
+# Global configuration
+global:
+  scrape_interval: 15s  # Set the scrape interval to every 15 seconds.
+  evaluation_interval: 15s  # Evaluate rules every 15 seconds.
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["52.66.237.34:9093"]
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - "alert.rules.yml"
+  # Uncomment the following lines if you have additional rule files.
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# Scrape configurations
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "node-exporter"
+    static_configs:
+      - targets: ["52.66.237.34:9100"]
+
+  - job_name: "project-web"
+    static_configs:
+      - targets: ["52.66.237.34:80"]
+
+  - job_name: "docker"
+    static_configs:
+      - targets: ["15.206.127.153:9323"]  # Docker metrics endpoint
+
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["52.66.237.34:8080"]

@@ -1,0 +1,21 @@
+---
+global:
+  resolve_timeout: 1m
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 1m
+  repeat_interval: 2m
+  receiver: 'email-alert'
+
+receivers:
+  - name: 'email-alert'
+    email_configs:
+      - to: 'gowdham93@gmail.com'
+        from: 'gowdhamraman93@gmail.com'
+        smarthost: 'smtp.gmail.com:587'
+        auth_username: 'gowdhamraman93@gmail.com'
+        auth_password: 'tyce zgok mdhk siek'  # Use an App Password if using Gmail with 2FA
+        require_tls: true  # This should be inside email_configs
+        send_resolved: true

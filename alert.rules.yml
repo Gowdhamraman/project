@@ -1,0 +1,11 @@
+groups:
+  - name: project-web-alerts
+    rules:
+      - alert: ProjectWebDown
+        expr: up{job="project-web"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Project Web Service is down"
+          description: "The project-web service is down."
