@@ -39,8 +39,7 @@ deploy.sh: Script to deploy the image to the server.
 Clone the Repository
 
 
-```git clone https:```git clone https://github.com/sriram-R-krishnan/devops-build```
-//github.com/sriram-R-krishnan/devops-build```
+```git clone https://github.com/sriram-R-krishnan/devops-build```
 
 ```cd devops-build```
 
