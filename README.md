@@ -1,21 +1,4 @@
-#!/bin/bash
-docker-compose up -d
-Jenkins Pipeline Configuration
-Jenkinsfile: Pipeline configuration.
-
-Build: Builds Docker images from both dev and master branches.
-Push: Pushes images to Docker Hub based on branch (dev or prod).
-Deploy: Deploys to AWS if code is in master.
-GitHub Webhook: Set up a webhook to trigger builds on push to dev or master.
-
-Docker Repositories
-Docker Hub Public Repository: my-docker-hub-username/dev
-Docker Hub Private Repository: my-docker-hub-username/prod
-AWS Deployment
-Instance Type: t2.micro
-Security Group:
-HTTP (Port 80): Accessible to all.
-SSH (Port 22): Restricted to your IP.# **DevOps React Application Deployment**
+#**DevOps React Application Deployment**
 
 This project demonstrates a complete CI/CD pipeline for deploying a React application using Docker, Docker Hub, Jenkins, and AWS. The pipeline includes automatic build triggers, version control, and monitoring setup.
 
