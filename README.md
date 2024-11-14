@@ -15,13 +15,15 @@ This project demonstrates a complete CI/CD pipeline for deploying a React applic
 
 **Project Structure**
 .
+```
 ├── build
 ├── build.sh
 ├── deploy.sh
 ├── docker-compose.yml
 ├── Dockerfile
 ├── Jenkinsfile
-└── nginx.conf
+└── nginx.conf 
+```
 
 Files and Directories
 
@@ -35,7 +37,7 @@ Steps to Deploy
 Clone the Repository
 
 
-git clone https://github.com/sriram-R-krishnan/devops-build
+```git clone https://github.com/sriram-R-krishnan/devops-build```
 
 ```cd devops-build```
 
@@ -72,12 +74,12 @@ build.sh: Builds the Docker image and tags it.
 
 bash
 Copy code
-#!/bin/bash
-docker build -t my-docker-hub-username/dev:latest .
+```#!/bin/bash
+docker build -t my-docker-hub-username/dev:latest .```
+
 deploy.sh: Deploys the Docker image to the server.
 
-bash
-Copy code
+
 #!/bin/bash
 docker-compose up -d
 Jenkins Pipeline Configuration
@@ -85,6 +87,7 @@ Jenkinsfile: Pipeline configuration.
 
 Build: Builds Docker images from both dev and master branches.
 Push: Pushes images to Docker Hub based on branch (dev or prod).
+
 Deploy: Deploys to AWS if code is in master.
 GitHub Webhook: Set up a webhook to trigger builds on push to dev or master.
 
