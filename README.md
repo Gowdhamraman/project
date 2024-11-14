@@ -1,4 +1,21 @@
-# **DevOps React Application Deployment**
+#!/bin/bash
+docker-compose up -d
+Jenkins Pipeline Configuration
+Jenkinsfile: Pipeline configuration.
+
+Build: Builds Docker images from both dev and master branches.
+Push: Pushes images to Docker Hub based on branch (dev or prod).
+Deploy: Deploys to AWS if code is in master.
+GitHub Webhook: Set up a webhook to trigger builds on push to dev or master.
+
+Docker Repositories
+Docker Hub Public Repository: my-docker-hub-username/dev
+Docker Hub Private Repository: my-docker-hub-username/prod
+AWS Deployment
+Instance Type: t2.micro
+Security Group:
+HTTP (Port 80): Accessible to all.
+SSH (Port 22): Restricted to your IP.# **DevOps React Application Deployment**
 
 This project demonstrates a complete CI/CD pipeline for deploying a React application using Docker, Docker Hub, Jenkins, and AWS. The pipeline includes automatic build triggers, version control, and monitoring setup.
 
@@ -7,7 +24,7 @@ This project demonstrates a complete CI/CD pipeline for deploying a React applic
 1. Project Structure
 2. Steps to Deploy
 3. Scripts
-4. Jenkins Pipeline Configuration
+4. Jenkins Multibranch Pipeline Configuration
 5. Docker Repositories
 6. AWS Deployment
 7. Monitoring
@@ -33,11 +50,14 @@ docker-compose.yml: Manages container orchestration for deployment.
 nginx.conf: Configuration file for serving the application via NGINX.
 build.sh: Script to build the Docker image.
 deploy.sh: Script to deploy the image to the server.
-Steps to Deploy
+
+**Steps to Deploy**
+
 Clone the Repository
 
 
-```git clone https://github.com/sriram-R-krishnan/devops-build```
+```git clone https:```git clone https://github.com/sriram-R-krishnan/devops-build```
+//github.com/sriram-R-krishnan/devops-build```
 
 ```cd devops-build```
 
@@ -69,20 +89,31 @@ Monitoring Setup
 
 Install an open-source monitoring tool (e.g., Prometheus, Grafana, or Monit) to check application health.
 Configure alerts to notify if the application goes down.
-Scripts
+
+
+**Scripts**
+
 build.sh: Builds the Docker image and tags it.
 
-bash
-Copy code
-```#!/bin/bash
-docker build -t my-docker-hub-username/dev:latest .```
+
+```
+#!/bin/bash
+# Build the Docker image
+docker build -t gowdhamr/project-app:latest .
+
+```
 
 deploy.sh: Deploys the Docker image to the server.
 
 
+```
 #!/bin/bash
-docker-compose up -d
-Jenkins Pipeline Configuration
+docker compose down
+docker compose up -d
+echo " Process completed!"
+```
+**Jenkins Multibranch Pipeline Configuration**
+
 Jenkinsfile: Pipeline configuration.
 
 Build: Builds Docker images from both dev and master branches.
@@ -91,15 +122,21 @@ Push: Pushes images to Docker Hub based on branch (dev or prod).
 Deploy: Deploys to AWS if code is in master.
 GitHub Webhook: Set up a webhook to trigger builds on push to dev or master.
 
-Docker Repositories
+**Docker Repositories**
+
 Docker Hub Public Repository: my-docker-hub-username/dev
 Docker Hub Private Repository: my-docker-hub-username/prod
-AWS Deployment
+
+
+**AWS Deployment**
+
 Instance Type: t2.micro
 Security Group:
 HTTP (Port 80): Accessible to all.
 SSH (Port 22): Restricted to your IP.
-Monitoring
+
+**Monitoring**
+
 Set up monitoring to:
 
 Track application health.
